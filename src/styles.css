@@ -1,0 +1,128 @@
+@import "tailwindcss";
+@import "@fontsource/instrument-serif/400.css";
+@import "@fontsource/instrument-serif/400-italic.css";
+@import "@fontsource-variable/geist";
+@import "@fontsource-variable/geist-mono";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* ---------- Design tokens: one warm red accent, warm neutrals, real dark theme ---------- */
+:root {
+  --paper: #fbf6f1;
+  --paper-2: #f4ebe3;
+  --card: #fffdfa;
+  --ink: #241816;
+  --ink-2: #5f4a44;
+  --ink-3: #98837c;
+  --line: #e9dbd2;
+  --line-2: #dcc8bd;
+  --red: #a51c2a;          /* cherry / oxblood accent */
+  --red-ink: #8c1422;      /* accent for small text */
+  --red-soft: #f5dcd8;     /* blush fill (row highlight) */
+  --red-tint: #fbefec;
+  --sand: #f1e2c4;         /* column highlight */
+  --sand-ink: #7e5412;
+  --ok: #2f7550;
+  --ok-soft: #e1efe5;
+  --bad: #b3261e;
+  --bad-soft: #f9e1dd;
+  --shadow: 0 1px 0 rgb(36 24 22 / 0.04), 0 8px 24px -12px rgb(36 24 22 / 0.18);
+}
+.dark {
+  --paper: #150d0c;
+  --paper-2: #1c1312;
+  --card: #221715;
+  --ink: #f4e8e2;
+  --ink-2: #c7b1a9;
+  --ink-3: #8f7870;
+  --line: #3a2a27;
+  --line-2: #4b3733;
+  --red: #e8565c;
+  --red-ink: #ff9a98;
+  --red-soft: #4a1d20;
+  --red-tint: #2b1616;
+  --sand: #42331a;
+  --sand-ink: #ebc57c;
+  --ok: #7fcb9c;
+  --ok-soft: #173024;
+  --bad: #ff8b82;
+  --bad-soft: #3d1a18;
+  --shadow: 0 1px 0 rgb(0 0 0 / 0.3), 0 10px 30px -14px rgb(0 0 0 / 0.7);
+}
+
+@theme inline {
+  --color-paper: var(--paper);
+  --color-paper-2: var(--paper-2);
+  --color-card: var(--card);
+  --color-ink: var(--ink);
+  --color-ink-2: var(--ink-2);
+  --color-ink-3: var(--ink-3);
+  --color-line: var(--line);
+  --color-line-2: var(--line-2);
+  --color-red: var(--red);
+  --color-red-ink: var(--red-ink);
+  --color-red-soft: var(--red-soft);
+  --color-red-tint: var(--red-tint);
+  --color-sand: var(--sand);
+  --color-sand-ink: var(--sand-ink);
+  --color-ok: var(--ok);
+  --color-ok-soft: var(--ok-soft);
+  --color-bad: var(--bad);
+  --color-bad-soft: var(--bad-soft);
+
+  --font-display: "Instrument Serif", ui-serif, Georgia, serif;
+  --font-sans: "Geist Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "Geist Mono Variable", ui-monospace, monospace;
+
+  --ease-out-soft: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+html { background: var(--paper); color: var(--ink); color-scheme: light; }
+html.dark { color-scheme: dark; }
+body {
+  font-family: var(--font-sans);
+  background: var(--paper);
+  font-feature-settings: "ss01", "cv11";
+  -webkit-font-smoothing: antialiased;
+}
+::selection { background: var(--red); color: var(--paper); }
+h1, h2, h3 { text-wrap: balance; }
+p { text-wrap: pretty; }
+
+/* paper grain: very subtle, keeps big flat areas from feeling synthetic */
+.grain::before {
+  content: ""; position: fixed; inset: 0; pointer-events: none; z-index: 60; opacity: .035;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+.dark .grain::before { opacity: .06; }
+
+/* ---------- matrix brackets ---------- */
+.mx { position: relative; display: inline-flex; vertical-align: middle; padding: 4px 10px; }
+.mx::before, .mx::after {
+  content: ""; position: absolute; top: 0; bottom: 0; width: 7px; border: 1.75px solid currentColor; opacity: .85;
+}
+.mx::before { left: 0; border-right: none; border-radius: 2px 0 0 2px; }
+.mx::after { right: 0; border-left: none; border-radius: 0 2px 2px 0; }
+.mx.bars::before, .mx.bars::after { border-top: none; border-bottom: none; width: 2px; }
+
+.cell { transition: background-color .18s ease, color .18s ease, opacity .18s ease, box-shadow .18s ease; }
+
+/* stacked fraction */
+.frac { display: inline-flex; flex-direction: column; align-items: center; vertical-align: middle; line-height: 1.05; font-size: .82em; }
+.frac > span:first-child { border-bottom: 1.25px solid currentColor; padding: 0 .15em; }
+
+/* focus ring that fits the palette */
+:where(a, button, input, select, [tabindex]):focus-visible { outline: 2px solid var(--red); outline-offset: 2px; border-radius: 6px; }
+
+input[type="number"]::-webkit-inner-spin-button { display: none; }
+
+.link-u { background: linear-gradient(currentColor, currentColor) 0 100% / 0 1.5px no-repeat; transition: background-size .35s var(--ease-out-soft); }
+.link-u:hover { background-size: 100% 1.5px; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; }
+}
+
+@media print {
+  aside, .no-print { display: none !important; }
+}
